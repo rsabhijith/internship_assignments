@@ -3,4 +3,4 @@ SCHEMATIC OF RIPPLE CARRY ADDER
 
 
 OUTPUT OF RIPPLE CARRY ADDER
-<img width="640" height="636" alt="image" src="https://github.com/user-attachments/assets/6ed39e75-07fd-4431-b866-cbeef01baba5" />
+<img width="300" height="300" alt="image" src="https://github.com/user-attachments/assets/6ed39e75-07fd-4431-b866-cbeef01baba5" />
