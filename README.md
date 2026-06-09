@@ -242,8 +242,8 @@ Upon successful completion of the internship:
 
 ## 🔗 Links & References
 
-- **Institution**: TKMCE (Thiruvananthapuram)
-- **Internship Duration**: [Add dates]
+- **Institution**: TKMCE (Karicode,Kollam)
+- **Internship Duration**: [from 8th june]
 - **Updated**: 2026
 
 ---
