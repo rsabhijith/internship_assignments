@@ -57,10 +57,17 @@ case (select)
     default: output = 1'bx;
 endcase
 ```
+###  **while Loop**
+Used for repetitive operations, though less common in hardware design.
 
-#### **casex and casez Statements**
-- `casex`: Treats 'x' and 'z' as don't cares
-- `casez`: Treats 'z' as don't care (x is significant)
+```verilog
+// Example: Find MSB position
+integer i = 0;
+while (i < 8 && data[i] == 1'b0) begin
+    i = i + 1;
+end
+```
+
 
 ### 2. **Blocking vs Non-Blocking Assignments**
 
@@ -512,65 +519,12 @@ By completing Day 2, you should understand:
 
 ---
 
-## 💡 Design Patterns
-
-### Pattern 1: Sequential Logic with Reset
-```verilog
-always @(posedge clk or negedge reset) begin
-    if (~reset)
-        Q <= 1'b0;  // Reset takes priority
-    else
-        Q <= D;     // Update on clock
-end
-```
-
-### Pattern 2: Shift Register with Mode Control
-```verilog
-always @(posedge clk) begin
-    case(mode)
-        2'b00: data <= data;              // Hold
-        2'b01: data <= {LSI, data[3:1]}; // Shift Left
-        2'b10: data <= {data[2:0], RSI}; // Shift Right
-        2'b11: data <= parallel_in;       // Load
-    endcase
-end
-```
-
-### Pattern 3: Combinational Logic with Conditional
-```verilog
-always @(*) begin              // Combinational - use @(*)
-    if (enable)
-        output = input_data;
-    else
-        output = default_value;
-end
-```
 
 ---
 
-## ✨ Next Steps (Day 3)
-
-After mastering Day 2 sequential circuits, you'll progress to:
-- **Counters:** Asynchronous and Synchronous designs
-- **Counter Types:** Up, Down, Up-Down counters
-- **Modulo Counters:** MOD-N counter circuits
-- **State Machines:** Finite State Machines (FSM)
-- **FSM Design:** Moore and Mealy architectures
-
----
-
-## 📚 References
-
-- IEEE Verilog Standard (IEEE 1364-2005)
-- Verilog HDL: A Guide to Digital Design and Synthesis
-- Digital Design and Computer Architecture
-- Sequential Circuit Design Principles
-
----
-
-**Created:** June 2026  
+**Created:** 9th June 2026  
 **Internship:** VLSI IC Design at TKMCE  
-**Status:** ✅ Completed  
+**Status:** ✅ Completed  day2
 
 ---
 
