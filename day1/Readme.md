@@ -235,43 +235,14 @@ day1/
 │   └── rca.md                 # RCA documentation with schematics
 │
 └── Readme.md                  # This file
+
+
+
 ```
-
----
-
-## 🧪 Simulation & Testing
-
-### Running RCA Simulation:
-```bash
-cd day1/Ripple_Carry_Adder/
-
-# Compile modules
-vlog design/*.v test/*.v
-
-# Run simulation
-vsim work.rca_tb
-
-# View waveforms
-run -all
-```
-
-### Running BCD Simulation:
-```bash
-cd day1/BCD_Adder/
-
-# Compile modules
-vlog design/*.v test/*.v
-
-# Run simulation
-vsim work.bcd_tb
-
-# View waveforms
-run -all
-```
-
----
 
 ## 📝 Key Verilog Concepts Learned
+
+```
 
 ### Module Declaration
 ```verilog
@@ -293,22 +264,7 @@ xor(output, input1, input2, ...);
 not(output, input);
 ```
 
-### Wire Declaration
-```verilog
-wire signal_name;  // For connecting modules and gate outputs
-```
 
-### Module Instantiation
-```verilog
-module_name instance_name(port_connections);
-```
-
-### Continuous Assignment
-```verilog
-assign output = expression;
-```
-
----
 
 ## 🎯 Learning Outcomes
 
@@ -334,28 +290,13 @@ By completing Day 1, you should understand:
 | 4-bit RCA | 9 | 5 | 20 | 8 |
 | BCD Adder | 9 | 5 | 30+ | 10+ |
 
----
-
-## ✨ Next Steps (Day 2)
-
-After mastering Day 1 circuits, you'll progress to:
-- **Sequential Logic:** Flip-flops (SR, D, JK, T)
-- **Counters:** Asynchronous and Synchronous
-- **Shift Registers:** SISO, SIPO, PISO, PIPO
-- **State Machines:** Moore and Mealy machines
 
 ---
 
-## 📚 References
-
-- IEEE Verilog Standard (IEEE 1364-2005)
-- Verilog HDL Syntax and Semantics
-- Digital Logic Design Fundamentals
-- Binary Arithmetic & Number Systems
 
 ---
 
-**Created:** June 2026  
+**Created:** 8th June 2026  
 **Internship:** VLSI IC Design at TKMCE  
 **Status:** ✅ Completed  
 
