@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 10.06.2026 10:30:50
+// Create Date: 10.06.2026 11:20:10
 // Design Name: 
-// Module Name: sequencedetect
+// Module Name: seqdetect_1110
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module sequencedetect(input clk,rst,din,output reg detected
+module seqdetect_1110(input clk,rst,din,output reg detected
 
     );
     parameter idle=2'b00;
@@ -31,9 +31,8 @@ module sequencedetect(input clk,rst,din,output reg detected
     //present state logic
     always@(posedge clk)
     begin
-    if(rst) begin
+    if (rst)
     ps<=idle;
-    end
     else
     ps<=ns;
     end
@@ -50,9 +49,9 @@ module sequencedetect(input clk,rst,din,output reg detected
     end
     s1:begin
     if(din==0)
-    ns=s2;
+    ns=idle;
     else
-    ns=s1;
+    ns=s2;
     end
     s2:begin
     if(din==0)
@@ -61,14 +60,13 @@ module sequencedetect(input clk,rst,din,output reg detected
     ns=s3;
     end
     s3:begin
-    if(din==0) begin
+    if (din==0) begin
     ns=idle;
     detected=1;
     end
     else
-    ns=s1;
+    ns=s3;
     end
     endcase
     end
 endmodule
-
