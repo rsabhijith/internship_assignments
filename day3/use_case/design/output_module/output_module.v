@@ -1,4 +1,4 @@
-module out_module(
+module output_module(
     input clk,
     input rst,
     input [7:0] din,
