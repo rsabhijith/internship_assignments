@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 10.06.2026 10:56:28
+// Create Date: 10.06.2026 11:31:44
 // Design Name: 
-// Module Name: sequencedetect_tb
+// Module Name: seqdetect_1110_tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,12 +20,12 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module sequencedetect_tb(
+module seqdetect_1110_tb(
 
     );
     reg clk_tb,rst_tb,din_tb;
     wire detected_tb;
-    sequencedetect dut(clk_tb,rst_tb,din_tb,detected_tb);
+    seqdetect_1110 dut(clk_tb,rst_tb,din_tb,detected_tb);
     initial
     begin
     {clk_tb,rst_tb,din_tb}=0;
@@ -39,16 +39,18 @@ module sequencedetect_tb(
     #10
     din_tb=1;
     #10
+    din_tb=1;
+    #10
     din_tb=0;
     #10
     din_tb=1;
     #10
-    din_tb=0;
+    din_tb=1;
+    #10
+    din_tb=1;
     #10
     din_tb=1;
     #10
     din_tb=0;
     end
-    
 endmodule
-
