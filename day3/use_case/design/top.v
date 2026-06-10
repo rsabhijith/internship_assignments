@@ -5,7 +5,7 @@
 // 
 // Create Date: 10.06.2026 21:49:19
 // Design Name: 
-// Module Name: seqdetect_001_tb
+// Module Name: top
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -18,7 +18,7 @@
 // Additional Comments:
 // 
 ///////////////////////////////////////////////////////////
-module top_module(input clk,rst,input [7:0] s_in,output [7:0] d_out
+module top (input clk,rst,input [7:0] s_in,output [7:0] d_out
 );
 
   wire [7:0] s_out, data_out;
