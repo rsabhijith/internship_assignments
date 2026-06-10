@@ -1,7 +1,7 @@
 # Day 3: Sequence Detector System with FIFO
 
 ## Overview
-This project implements a complete digital system consisting of three main components:
+Today we implemented a complete digital system consisting of three main components:
 1. **FSM (Finite State Machine)** - Sequence Detector
 2. **FIFO (First-In-First-Out Buffer)** - 8x8 memory
 
