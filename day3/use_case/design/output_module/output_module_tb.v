@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module out_module_tb;
+module output_module_tb;
 
 reg clk_tb;
 reg rst_tb;
@@ -29,7 +29,7 @@ reg [7:0] din_tb;
 wire rd_enb_tb;
 wire [7:0] dout_tb;
 
-out_module dut(
+output_module dut(
     clk_tb,
     rst_tb,
     din_tb,
