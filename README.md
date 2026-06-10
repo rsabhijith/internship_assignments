@@ -86,7 +86,7 @@ internship_assignments/
 - Testbench: `day1/BCD_Adder/testbench/`
 - Documentation: `day1/BCD_Adder/bcd.md`
 
-**Status**: 🔄 In Progress
+**Status**: 🔄 Completed
 
 ---
 
@@ -146,7 +146,7 @@ internship_assignments/
 ## 🚀 Getting Started
 
 ### Prerequisites
-1. EDA tools installed (Vivado, ModelSim, or equivalent)
+1. EDA tools installed (Vivado)
 2. Verilog/SystemVerilog knowledge
 3. Basic digital logic understanding
 
@@ -207,20 +207,19 @@ By completing this internship, you will:
 ## 📚 Additional Resources
 
 ### Documentation
-- EDA Tool User Guides (Vivado, ModelSim documentation)
+- EDA Tool User Guides (Vivado)
 - IEEE Verilog Standards (IEEE 1364-2005)
 - VLSI Design Textbooks
 
 ### Useful Links
 - [Vivado Documentation](https://www.xilinx.com/support/documentation-navigation.html)
-- [ModelSim User Manual](https://www.mentor.com/products/fv/modelsim/)
-- [Open Source EDA Tools](https://efabless.com/open_source_tools)
+
 
 ## 📧 Support & Mentorship
 
 - **Faculty Mentors**: TKMCE Department of ECE
 - **Industry Mentors**: Experienced semiconductor design professionals
-- **Office Hours**: [Schedule to be added]
+
 
 ## 📜 Certificate & Recommendation
 
