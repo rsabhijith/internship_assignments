@@ -1,40 +1,56 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 10.06.2026 20:57:58
-// Design Name: 
-// Module Name: output_module
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
+module out_module(
+    input clk,
+    input rst,
+    input [7:0] din,
+    output reg rd_enb,
+    output reg [7:0] dout
+);
 
+parameter S0 = 2'b00;
+parameter S1 = 2'b01;
+parameter S2 = 2'b10;
 
-module output_module(input [7:0]d_in,
-input clk, output reg [7:0]d_out
+reg [1:0] state;
 
-    );
-    reg [1:0]m=0;
-    always@(posedge clk)
+always @(posedge clk)
+begin
+    if(rst)
     begin
-    if(m==2) begin
-    d_out<=d_in;
-    m<=0;
+        state <= S0;
+        rd_enb <= 1'b0;
+        dout <= 8'h00;
     end
     else
-    m<=m+1;
-    end
-    initial
-    d_out<=0;
-endmodule
+    begin
+        case(state)
 
+        S0:
+        begin
+            rd_enb <= 1'b0;
+            state <= S1;
+        end
+
+        S1:
+        begin
+            rd_enb <= 1'b0;
+            state <= S2;
+        end
+
+        S2:
+        begin
+            rd_enb <= 1'b1;
+            dout <= din;
+            state <= S0;
+        end
+
+        default:
+        begin
+            rd_enb <= 1'b0;
+            state <= S0;
+        end
+
+        endcase
+    end
+end
+
+endmodule
