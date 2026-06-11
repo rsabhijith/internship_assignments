@@ -19,4 +19,7 @@ The module includes:
 ## Simulation Output
 <img width="1232" height="558" alt="Memory Block Generator Simulation" src="https://github.com/user-attachments/assets/b16e5aba-b62b-4b83-91e7-fd3d8b9e9d13" />
 
+<img width="500" height="300" alt="image" src="https://github.com/user-attachments/assets/21a464b3-b158-423e-bc8b-95b4bbf3e741" />
+<img width="200" height="300" alt="image" src="https://github.com/user-attachments/assets/dade5e1d-f446-4a8d-85a6-c9813ca349b7" />
+
 **Test Results:** Successfully demonstrates writing 8 data values (0x10 through 0x80) to memory addresses 0x00-0x07, followed by reading all values back with correct data integrity verified.
