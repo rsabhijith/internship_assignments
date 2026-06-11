@@ -1,4 +1,4 @@
-# Memory Block Generator - Output
+# Memory Block Generator
 
 ## Overview
 A synchronous 256x8 RAM (Random Access Memory) module implemented in Verilog that demonstrates dual-port read/write operations with asynchronous reset functionality.
