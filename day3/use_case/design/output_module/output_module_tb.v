@@ -20,55 +20,40 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module output_module_tb;
+module output_module_tb(
 
-reg clk_tb;
-reg rst_tb;
-reg [7:0] din_tb;
-
-wire rd_enb_tb;
-wire [7:0] dout_tb;
-
-output_module dut(
-    clk_tb,
-    rst_tb,
-    din_tb,
-    rd_enb_tb,
-    dout_tb
-);
-
-always #5 clk_tb = ~clk_tb;
-
-initial
-begin
-    {clk_tb,rst_tb,din_tb} = 0;
-end
-
-initial
-begin
-    rst_tb = 1;
-    #10
-    rst_tb = 0;
-
+    );
+    reg clk_tb,rst_tb;
+    reg [7:0]d_in_tb;
+    wire rd_enb_tb;
+    wire [7:0]d_out_tb;
+    output_module dut (clk_tb,rst_tb,d_in_tb,rd_enb_tb,d_out_tb);
+    always #5 clk_tb=~clk_tb;
+    initial
+    begin
+    {clk_tb,rst_tb,d_in_tb}=0;
+    end
+    initial
+    begin
+    rst_tb=1;
     #10 
-    din_tb = 8'h10;
-    #10 
-    din_tb = 8'h20;
-    #10 
-    din_tb = 8'h30;
-    #10 
-    din_tb = 8'h40;
-    #10 
-    din_tb = 8'h50;
-    #10 
-    din_tb = 8'h60;
-    #10 
-    din_tb = 8'h70;
-    #10 
-    din_tb = 8'h80;
+    rst_tb=0;
+    d_in_tb = 8'h10;
+    #30 
+    d_in_tb = 8'h20;
+    #30 
+    d_in_tb = 8'h30;
+    #30 
+    d_in_tb = 8'h40;
+    #30 
+    d_in_tb = 8'h50;
+    #30 
+    d_in_tb = 8'h60;
+    #30 
+    d_in_tb = 8'h70;
+    #30 
+    d_in_tb = 8'h80;
 
-    #100
-    $finish;
-end
-
+    end
+    
 endmodule
