@@ -447,55 +447,9 @@ On day 5, we delved deep into the fundamentals of hardware verification and expl
    - **Methods**: Functions operating on object state
    - **Tasks vs Functions**: Functions return values instantly, tasks can have delays
    
-   #### Static Members and Methods
-   ```systemverilog
-   class Transaction;
-     static int transaction_id = 0;  // Shared among all instances
-     int this_id;
-     
-     function new();
-       this_id = ++transaction_id;  // Each instance gets unique ID
-     endfunction
-     
-     static function int get_total_transactions();
-       return transaction_id;
-     endfunction
-   endclass
-   ```
-   - `static` members shared across all instances
-   - `static` methods can only access static members
-   - Useful for counters, global configuration
-   
-   #### Class Inheritance and Polymorphism
-   ```systemverilog
-   // Base class
-   class BaseTransaction;
-     bit [7:0] address;
-     
-     virtual function void display();
-       $display("Base: Address=%h", address);
-     endfunction
-   endclass
-   
-   // Derived class
-   class WriteTransaction extends BaseTransaction;
-     bit [31:0] write_data;
-     
-     virtual function void display();
-       $display("Write: Address=%h Data=%h", address, write_data);
-     endfunction
-   endclass
-   
-   // Polymorphism in action
-   BaseTransaction trans;
-   WriteTransaction wtrans = new();
-   trans = wtrans;
-   trans.display();  // Calls WriteTransaction::display()
-   ```
-   - **Inheritance**: `extends` keyword for base class relationship
-   - **Virtual methods**: Overridden in derived classes
-   - **Polymorphism**: Same interface, different behaviors
-   - **is-a relationship**: Derived class is a subtype of base class
+  
+  
+  
 
 ## Key Learnings
 
@@ -537,39 +491,3 @@ These concepts form the foundation for building:
 - **Professional Verification Environments**: Used in industry for complex SoC designs
 - **Parameterized Test Infrastructure**: Supporting multiple DUT configurations
 
-## Example: Simple AXI-like Transaction Class
-
-```systemverilog
-class AXITransaction;
-  // Properties
-  rand bit [31:0] address;
-  rand bit [63:0] data;
-  rand bit [7:0] burst_len;
-  bit [31:0] response;
-  
-  // Constraints
-  constraint valid_burst { burst_len inside {1, 2, 4, 8, 16}; }
-  constraint address_aligned { address[1:0] == 2'b00; }
-  
-  // Methods
-  function new();
-    response = 32'h0;
-  endfunction
-  
-  virtual function string convert2string();
-    return $sformatf("Addr=%h Data=%h Burst=%0d",
-                     address, data, burst_len);
-  endfunction
-  
-  virtual function void display();
-    $display(convert2string());
-  endfunction
-endclass
-```
-
-## Next Steps
-
-- Study UVM (Universal Verification Methodology) for structured approach
-- Practice writing constrained random tests
-- Learn about assertions and formal verification
-- Explore advanced coverage techniques
