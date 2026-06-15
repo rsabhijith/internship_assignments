@@ -9,21 +9,7 @@ A BCD (Binary Coded Decimal) Interface module that implements the conversion and
 - **BCD Arithmetic Support**: Enables addition of two BCD numbers with carry propagation
 - **BCD to Binary Conversion**: Translates BCD results back to binary format for system integration
 - **Carry Handling**: Manages carry signals between BCD digit additions
-- **Format Translation**: Seamlessly converts between different number representations
 
-## Architecture
-
-### Input Signals
-- `binary_input`: Standard binary number (typically 4-bit for single digit)
-- `bcd_select`: Selector for input/output mode
-- `clock`: System clock signal
-- `reset`: System reset signal
-
-### Output Signals
-- `bcd_output`: BCD formatted result
-- `binary_output`: Converted binary result
-- `carry_out`: Carry signal for multi-digit operations
-- `valid`: Data validity indicator
 
 ## Operations
 
@@ -35,12 +21,6 @@ A BCD (Binary Coded Decimal) Interface module that implements the conversion and
 ## Output
 <img width="976" height="156" alt="image" src="https://github.com/user-attachments/assets/8ca0754e-5df7-4320-94c1-f48beb42a680" />
 
-## Design Considerations
-
-- **Timing Constraints**: Ensures conversion and arithmetic operations complete within clock cycle
-- **Overflow Handling**: Manages cases where BCD results exceed 9
-- **Reset Behavior**: Initializes all internal registers and state machines
-- **Format Compatibility**: Maintains compatibility with standard binary systems
 
 ## Applications
 
