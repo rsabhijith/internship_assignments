@@ -1,3 +1,6 @@
+OUTPUT OF APB
+<img width="566" height="496" alt="Screenshot 2026-06-17 154000" src="https://github.com/user-attachments/assets/d95215a1-07a8-4d54-b884-07685e386a11" />
+
 # APB Protocol (Advanced Peripheral Bus)
 
 ## Overview
