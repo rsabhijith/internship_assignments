@@ -6,7 +6,6 @@
 //   - Replaced backward loop with an upward incrementing loop to capture 
 //     all columns of the sliding window register matrix.
 //////////////////////////////////////////////////////////////////////////////////
-
 module conv #(
     parameter int PIX_WIDTH          = 8,
     parameter int WEIGHT_WIDTH       = 10,
@@ -263,12 +262,5 @@ end
     assign o_valid = valid_delayed && (rows_cntr > 1) && (rows_cntr < img_height) && (cols_cntr > 1) && (cols_cntr < img_width);
     assign o_sop = sop_delay[2];
 assign o_eop = eop_delay[2];
-always @(posedge clk) begin
-    if(i_eop || o_eop)
-        $display("%0t i_eop=%0b eop_delay=%b o_eop=%0b",
-                 $time,
-                 i_eop,
-                 eop_delay,
-                 o_eop);
-end
+
 endmodule
