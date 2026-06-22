@@ -1,7 +1,4 @@
 // -----------------------------------------------------------------------------
-// Module      : kernel_memory
-// Owner       : Member 3 (Multi-Channel Convolution Owner)
-// Description : BRAM-synthesizable configuration storage array for kernels/biases.
 // -----------------------------------------------------------------------------
 
 module kernel_memory import cnn_config_pkg::*; #(
