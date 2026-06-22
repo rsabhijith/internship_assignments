@@ -13,6 +13,5 @@ always_comb begin
 	foreach (o_data[i]) begin
 		o_data[i] = i_data[i][PIX_WIDTH-1] ? '0 : i_data[i];
 	end
-	
 end
 endmodule
