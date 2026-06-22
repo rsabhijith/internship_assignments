@@ -1,7 +1,5 @@
 // -----------------------------------------------------------------------------
-// Module      : runtime_weight_loader
-// Owner       : Member 3 (Multi-Channel Convolution Owner)
-// Description : Sequential address counter for loading weights during runtime.
+
 // -----------------------------------------------------------------------------
 
 module runtime_weight_loader import cnn_config_pkg::*; #(
