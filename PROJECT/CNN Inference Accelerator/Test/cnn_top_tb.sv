@@ -258,10 +258,6 @@ module CNN_TB ();
                 wr_en   = 1'b1;
                 wr_addr = 10'(idx);
                 wr_data = PIX_WIDTH'($rtoi((img[r][c]/255.0) * R2I_COEF));
-                 if(idx < 20)
-                $display("WRITE addr=%0d data=%0d",
-                         wr_addr,
-                         wr_data);
 
                 @(posedge clk);
                 idx++;
@@ -272,17 +268,27 @@ module CNN_TB ();
 task automatic stream_image(input real img [IMG_HEIGHT][IMG_WIDTH]);
 begin
     load_image(img);
-
-    $display("%0t ASSERTING START",$time);
-
     start = 1'b1;
     @(posedge clk);
-
-    $display("%0t DEASSERTING START",$time);
-
     start = 1'b0;
 end
 
+endtask
+task automatic run_image(
+    input string name,
+    input real img [IMG_HEIGHT][IMG_WIDTH]
+);
+begin
+    $display("\nStarting %s", name);
+
+    stream_image(img);
+
+    @(posedge o_valid);
+
+    $display("%s completed", name);
+
+    repeat(5) @(posedge clk);
+end
 endtask
 
     // =========================================================================
@@ -416,156 +422,13 @@ endtask
             '{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
         };
 
-    // =========================================================================
-    // DEBUG: golden bit-accurate reference values for image_7, computed
-    // offline in Python using the REAL trained weights from CNN.svh, the
-    // real image_7 pixel data, and the exact same fixed-point scale/clamp
-    // rules as the RTL (Q5.5, saturating int8 conv output, channel-major
-    // flatten order). The Python model correctly predicts digit 7.
-    // Compare these against the live hardware signals below to find exactly
-    // which stage first diverges.
-    // =========================================================================
-    int golden_flat[200] = '{
-        24,41,36,31,23,15,53,62,65,55,0,0,14,14,17,0,7,22,8,8,0,23,25,8,3,
-        0,0,0,0,0,28,45,41,20,0,19,41,45,18,13,0,0,0,4,13,0,0,0,17,10,
-        18,9,3,4,0,32,44,41,52,19,16,34,49,69,22,0,7,38,42,6,0,39,46,15,4,
-        20,14,6,8,3,33,17,5,13,0,11,5,16,52,0,0,4,50,52,0,0,41,58,0,0,
-        7,15,14,12,9,15,31,32,39,38,8,19,26,42,41,0,2,22,37,27,0,13,42,36,7,
-        0,0,0,0,0,29,54,54,50,1,9,22,27,29,11,0,0,4,4,10,0,7,0,16,9,
-        7,22,19,15,15,24,39,42,47,49,10,12,14,58,49,0,0,37,58,22,0,18,64,50,0,
-        14,24,22,19,15,19,37,36,51,47,8,16,24,51,47,0,3,35,46,26,0,23,52,41,5
-    };
-
-    int golden_fc1[64] = '{
-        45,88,-12,63,32,89,69,-31,129,108,0,29,38,26,87,75,9,2,13,98,29,-21,5,91,46,
-        35,28,18,-25,-1,1,-40,20,0,64,-10,19,89,-12,16,-15,-12,134,116,-7,121,44,2,57,38,
-        59,101,-7,-1,7,16,35,111,0,53,-28,-38,96,111
-    };
-
-    int golden_fc2[10] = '{-55,-87,42,62,-184,-53,-280,256,-52,46};
-
-    // =========================================================================
-    // DEBUG: live-streaming checker for image_7. Hooks directly into the DUT
-    // hierarchy and compares against the golden values above AS THE DATA
-    // STREAMS, rather than requiring manual waveform navigation.
-    //
-    // Hierarchical paths used (verified against this project's instance names):
-    //   inst_cnn_top.inst_flat.img_buf[ch][px]                          -- flat buffer
-    //   inst_cnn_top.fc_genloop[0].inst_fully_connected_layer.o_data    -- FC1 output (numb=0)
-    //   classes[]                                                       -- final scores (top-level TB signal)
-    // =========================================================================
-    // =========================================================================
-    // DEBUG: clocked capture of FC1's output stream during image_7's frame.
-    // o_data/integrators are transient (overwritten every RELEASE cycle), so
-    // a one-shot snapshot read after the frame finishes is unreliable -- this
-    // monitor latches each of FC1's 10..64 output values AS they go valid,
-    // indexed in order, while `capturing_fc1` is set.
-    // =========================================================================
-    bit capturing_fc1 = 1'b0;
-    int fc1_captured[64];
-    int fc1_capture_idx;
-
-    always @(posedge clk) begin
-        if (capturing_fc1 && inst_cnn_top.fc_genloop[0].inst_fully_connected_layer.o_valid) begin
-            if (fc1_capture_idx < 64)
-                fc1_captured[fc1_capture_idx] <= $signed(inst_cnn_top.fc_genloop[0].inst_fully_connected_layer.o_data);
-            fc1_capture_idx <= fc1_capture_idx + 1;
-        end
-    end
-
-    task automatic check_image7_golden();
-        int mism_flat, mism_fc1, mism_fc2;
-        int got;
-        mism_flat = 0;
-        mism_fc1  = 0;
-        mism_fc2  = 0;
-
-        $display("\n========== DEBUG: image_7 golden-trace comparison ==========");
-
-        // ---- checkpoint 1: flat buffer (channel-major: ch = idx/25, px = idx%25) ----
-        // img_buf persists unchanged after image_7's frame until image_2's FILL
-        // phase starts overwriting it, so a snapshot read here is safe AS LONG AS
-        // this task is called immediately after run_image("image_7", ...) returns,
-        // before run_image("image_2", ...) begins.
-        $display("---- flat[] (200 values) ----");
-        for (int idx = 0; idx < 200; idx++) begin
-            automatic int ch = idx / 25;
-            automatic int px = idx % 25;
-            got = $signed(inst_cnn_top.inst_flat.img_buf[ch][px]);
-            if (got !== golden_flat[idx]) begin
-                mism_flat++;
-                if (mism_flat <= 10)  // don't flood the log if everything's wrong
-                    $display("  flat[%0d] (ch=%0d,px=%0d) MISMATCH: expected=%0d actual=%0d  <-- DIVERGES HERE",
-                              idx, ch, px, golden_flat[idx], got);
-            end
-        end
-        if (mism_flat == 0)
-            $display("  flat[] : ALL 200 VALUES MATCH -- bug is downstream of flatten");
-        else
-            $display("  flat[] : %0d / 200 MISMATCHES -- bug is at or before flatten (conv1/pool1/conv2/pool2)", mism_flat);
-
-        // ---- checkpoint 2: FC1 output (64 values), captured live during the frame ----
-        $display("---- fc1 output (64 values, captured live) ----");
-        $display("  fc1_capture_idx ended at %0d (expected 64)", fc1_capture_idx);
-        for (int j = 0; j < 64; j++) begin
-            if (fc1_captured[j] !== golden_fc1[j]) begin
-                mism_fc1++;
-                if (mism_fc1 <= 10)
-                    $display("  fc1[%0d] MISMATCH: expected=%0d actual=%0d  <-- DIVERGES HERE", j, golden_fc1[j], fc1_captured[j]);
-            end
-        end
-        if (mism_fc1 == 0)
-            $display("  fc1[] : ALL 64 VALUES MATCH -- bug is at or after relu/FC2");
-        else
-            $display("  fc1[] : %0d / 64 MISMATCHES -- bug is inside FC1 (or its input, if flat[] also mismatched above)", mism_fc1);
-
-        // ---- checkpoint 3: final classes[] ----
-        $display("---- classes[] (10 values) ----");
-        for (int k = 0; k < 10; k++) begin
-            got = $signed(classes[k]);
-            if (got !== golden_fc2[k]) begin
-                mism_fc2++;
-                $display("  classes[%0d] MISMATCH: expected=%0d actual=%0d  <-- DIVERGES HERE", k, golden_fc2[k], got);
-            end else begin
-                $display("  classes[%0d] OK: %0d", k, got);
-            end
-        end
-        if (mism_fc2 == 0)
-            $display("  classes[] : ALL MATCH (this would mean image_7 was actually predicted correctly this run!)");
-
-        $display("==============================================================\n");
-    endtask
-
+   
     // =========================================================================
     // Main stimulus
     // =========================================================================
-    int     max_idx;
-    integer max_val;
-    integer i;
-integer mismatch;
-integer flat_idx;
-
-// adjust width if flat_data is not 8 bits
-logic signed [7:0] flat_capture [0:199];
-    task automatic run_image(string name, real img [IMG_HEIGHT][IMG_WIDTH]);
-        $display("\nStarting %s stream", name);
-        stream_image(img);
-
-        // IMPORTANT: wait(o_valid) is LEVEL-sensitive. If o_valid is still
-        // high from the previous frame's result, wait() returns immediately
-        // and we read stale classes[] from the prior image. Force a clean
-        // edge: first make sure o_valid has gone low (end of previous
-        // result window), then wait for its rising edge for THIS frame.
-        if (inst_cnn_top.o_valid)
-            @(negedge inst_cnn_top.o_valid);
-        @(posedge inst_cnn_top.o_valid);
-
-        print_status_reg(name);
-        $display("CNN output received for %s", name);
-        clear_frame_done_flag();
-        repeat (5) @(posedge clk);
-    endtask
-
+integer i=0;
+integer max_idx=0;
+integer max_val=0;
     initial begin
         rst_n = 0;
         #100;
@@ -575,75 +438,26 @@ logic signed [7:0] flat_capture [0:199];
         @(posedge clk);
         load_all_weights();
         print_status_reg("after_initial_load");
-flat_idx = 0;
-
-for(int i=0;i<200;i++)
-    flat_capture[i] = 0;
-    fc1_capture_idx = 0;
-capturing_fc1   = 1'b1;
-
-for(int i=0;i<64;i++)
-    fc1_captured[i] = 0;
         run_image("image_7", image_7);
-        capturing_fc1 = 1'b0;
-check_image7_golden();
         run_image("image_2", image_2);
-
-        // Demonstrate a runtime weight reload between frames
-        // TEMPORARILY DISABLED — suspected to hang the cfg handshake and
-        // block image_1 / image_0 from ever streaming. Re-enable once the
-        // handshake stall is root-caused and fixed.
-        // reload_weights_runtime();
-        // print_status_reg("after_runtime_reload");
-
         run_image("image_1", image_1);
         run_image("image_0", image_0);
 
         #1000;
         $finish;
     end
-
     // =========================================================================
     // Dataflow / status monitors
     // =========================================================================
-    always @(posedge clk) begin
-        if (inst_cnn_top.conv_valid[0]) $display("CONV1 ACTIVE");
-        if (inst_cnn_top.pool_valid[0]) $display("POOL1 ACTIVE");
-        if (inst_cnn_top.conv_valid[CONV_NUMB-1]) $display("CONV2 ACTIVE");
-        if (inst_cnn_top.pool_valid[CONV_NUMB-1]) $display("POOL2 ACTIVE");
-        if (inst_cnn_top.flat_valid) $display("FLAT VALID, data=%0d", inst_cnn_top.flat_data);
-        
-        if (inst_cnn_top.fc_valid[FLAT_NUMB-1])
-            $display("FC2 = %0d", $signed(inst_cnn_top.fc_data[FLAT_NUMB-1]));
-        if (frame_done && !frame_done_prev)
-            $display("STATUS REGISTER: frame_done pulsed");
-        frame_done_prev <= frame_done;
-    end
-    always @(posedge clk) begin
-    if (inst_cnn_top.flat_valid) begin
-        if(flat_idx < 200) begin
-            flat_capture[flat_idx] <= $signed(inst_cnn_top.flat_data);
-            flat_idx <= flat_idx + 1;
-        end
-    end
-end
-
-    initial begin
-        $display(" t  relu_en pool_en fc_en");
-        forever begin
-            @(posedge clk);
-            if (relu_en || pool_en || fc_en)
-                $display("%0t  %0b       %0b       %0b", $time, relu_en, pool_en, fc_en);
-        end
-    end
+ 
+    
 
     always @(posedge clk) begin
         if (o_valid) begin
             @(posedge clk); // allow classes[] to settle
 
             $display("\n========== CNN OUTPUT ==========");
-            for (i = 0; i < CLASSES_QNT; i = i + 1)
-                $display("Class[%0d] = %0d", i, $signed(classes[i]));
+        
 
             max_idx = 0;
             max_val = $signed(classes[0]);
