@@ -6,7 +6,7 @@ module pixel_stream_generator import cnn_config_pkg::*; #(
     input  logic                  clk     ,
     input  logic                  rst_n   ,
     input  logic                  start   ,
-
+    
     output logic [9:0]            rd_addr ,
     input  logic [PIX_WIDTH-1:0]  pixel_in,
 
@@ -66,39 +66,5 @@ module pixel_stream_generator import cnn_config_pkg::*; #(
             end
         end
     end
-always @(posedge clk) begin
-    if(o_valid && rd_addr < 20)
-        $display("READ addr=%0d data=%0d",
-                 rd_addr,
-                 o_data);
-end
-always @(posedge clk) begin
-   
 
-    if(streaming)
-        $display("STREAMING pixel_cnt=%0d", pixel_cnt);
-
-    if(done)
-        $display("DONE");
-end
-always @(posedge clk) begin
-    if(start || streaming)
-        $display("%0t start=%0b  streaming=%0b done=%0b valid=%0b cnt=%0d",
-                 $time,
-                 start,
-                 
-                 streaming,
-                 done,
-                 o_valid,
-                 pixel_cnt);
-end
-always @(posedge clk) begin
-    if(start)
-        $display("%0t START HIGH",$time);
-
-
-
-    if(streaming)
-        $display("%0t STREAMING cnt=%0d",$time,pixel_cnt);
-end
 endmodule : pixel_stream_generator
