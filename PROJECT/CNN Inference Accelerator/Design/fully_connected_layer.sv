@@ -1,27 +1,4 @@
 // =============================================================================
-// fully_connected_layer.sv  —  Upgraded FC layer for CNN inference accelerator
-//
-// Improvements applied
-//   #1  single_port_rom replaced with dual_port_ram — write and read ports are
-//       fully independent, enabling runtime weight updates mid-inference on the
-//       NEXT frame without corrupting the current MAC accumulation.
-//   #2  Self-contained — no external package dependency; all widths/dims are
-//       plain module parameters with sensible defaults, overridable at
-//       instantiation.
-//   #3  Performance-monitor outputs: o_frame_start / o_frame_done / o_busy.
-//   #4  Runtime weight-loader interface formalised:
-//         weight_load_en  — global write-enable strobe
-//         weight_addr     — {sel[log2(OUT):0], addr[log2(IN)-1:0]} packed bus
-//         weight_data     — write data (int → logic for clean synthesis)
-//       Bias bank also writable through the same interface (sel == OUT_DIMENSION).
-//   #5  Status-register outputs: o_state, o_col_cntr, o_out_cntr.
-//
-// Backward-compatible — original weight_mem_in_* ports preserved as aliases
-// to the new interface so existing test-benches still connect.
-// -----------------------------------------------------------------------------
-// Copyright (c) 2014-2024 All rights reserved
-// Author : Maksim Ananev  mananev086@gmail.com  (original)
-//          Upgraded 2024 — see improvement list above
 // -----------------------------------------------------------------------------
 module fully_connected_layer import cnn_config_pkg::*; #(
     parameter int unsigned PIX_WIDTH          = cnn_config_pkg::PIX_WIDTH         ,
