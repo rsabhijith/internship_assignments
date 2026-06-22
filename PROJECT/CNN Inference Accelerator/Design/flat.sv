@@ -1,25 +1,4 @@
 // =============================================================================
-// flat.sv  —  Upgraded flatten layer for CNN inference accelerator
-//
-// Improvements applied
-//   #1  Synthesizable shift-register buffer (no sim-only unpacked 3-D array cast
-//       to a plain wire; buffer is now a proper 1-D shift register readable at
-//       any index without a combinational wire alias that some synthesisers
-//       refuse to elaborate).
-//   #2  Self-contained — no external package dependency; all dimensions are
-//       plain module parameters with sensible defaults, overridable at
-//       instantiation (e.g. .DIMENSION(2), .IMG_W(4), .IMG_H(4)).
-//   #3  Performance-monitor outputs: o_frame_start / o_frame_done pulses and
-//       o_busy flag wired out for performance_monitor.sv.
-//   #4  Runtime reconfiguration hook: i_flush input lets the host abort a
-//       partial frame and return the module to IDLE without full reset.
-//   #5  Status-register outputs: o_state, o_row, o_col for status_register.sv.
-//
-// Backward-compatible port additions only — existing connections unchanged.
-// -----------------------------------------------------------------------------
-// Copyright (c) 2014-2024 All rights reserved
-// Author : Maksim Ananev  mananev086@gmail.com  (original)
-//          Upgraded 2024 — see improvement list above
 // -----------------------------------------------------------------------------
 module flat import cnn_config_pkg::*; #(
     parameter int unsigned PIX_WIDTH   = cnn_config_pkg::PIX_WIDTH        ,
