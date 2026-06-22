@@ -1,7 +1,6 @@
 module status_register (
     input  logic clk,
     input  logic rst_n,
-
     input  logic relu0_done,
     input  logic pool0_done,
     input  logic relu1_done,
@@ -118,82 +117,5 @@ always_comb begin
         DONE:         frame_done = 1;
     endcase
 end
-always @(posedge clk) begin
-    $display("%0t state=%0d relu0_done=%0b pool0_done=%0b relu1_done=%0b pool1_done=%0b fc0_done=%0b fc1_done=%0b",
-             $time,
-             state,
-             relu0_done,
-             pool0_done,
-             relu1_done,
-             pool1_done,
-             fc0_done,
-             fc1_done);
-end
-always @(posedge clk) begin
-    $display("%0t CUR_STATE=%0d NEXT_STATE=%0d",
-             $time,
-             state,
-             next_state);
-end
-always @(posedge clk) begin
-    if(state != next_state)
-        $display("%0t STATE CHANGE %0d -> %0d",
-                 $time,
-                 state,
-                 next_state);
-end
-always @(posedge clk) begin
-    if(pool0_done || pool1_done)
-        $display("%0t POOL_DONE pool0=%0b pool1=%0b state=%0d next=%0d",
-                 $time,
-                 pool0_done,
-                 pool1_done,
-                 state,
-                 next_state);
-end
-always @(posedge clk) begin
-    if(relu0_done || relu1_done)
-        $display("%0t RELU_DONE relu0=%0b relu1=%0b state=%0d next=%0d",
-                 $time,
-                 relu0_done,
-                 relu1_done,
-                 state,
-                 next_state);
 
-    if(fc0_done)
-        $display("%0t FC0_DONE state=%0d next=%0d",
-                 $time,
-                 state,
-                 next_state);
-
-    if(fc1_done)
-        $display("%0t FC1_DONE state=%0d next=%0d",
-                 $time,
-                 state,
-                 next_state);
-end
-always @(posedge clk) begin
-    if(state==4)
-        $display("%0t STATE4 pool1_done=%0b pool1_done_latched=%0b",
-                 $time,
-                 pool1_done,
-                 pool1_done_latched);
-end
-always @(posedge clk) begin
-    $display("%0t FSM_INPUTS relu0_done=%0b pool0_done=%0b relu1_done=%0b pool1_done=%0b fc0_done=%0b fc1_done=%0b",
-             $time,
-             relu0_done,
-             pool0_done,
-             relu1_done,
-             pool1_done,
-             fc0_done,
-             fc1_done);
-             
-end
-always_comb begin
-    if(state==POOL1)
-        $display("POOL1_COMB pool0_done=%0b pool0_done_latched=%0b",pool0_done,pool0_done_latched);
-end
-always @(posedge clk)
-    $display("STATUS_REGISTER_VERSION_DEF456");
 endmodule
