@@ -7,7 +7,7 @@ module maxpooling import cnn_config_pkg::*; #(
     input                        clk,
     input                        clk_en,
     input                        rst_n,
-
+    
     // Input pixels
     input        [PIX_WIDTH-1:0] i_data,
     input                        i_valid,
