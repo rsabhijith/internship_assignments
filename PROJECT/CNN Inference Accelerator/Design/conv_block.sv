@@ -3,7 +3,6 @@
 // Owner       : Member 3 (Multi-Channel Convolution Owner)
 // Description : Top structural processing matrix with pipelined channel summing.
 // -----------------------------------------------------------------------------
-
 module conv_block import cnn_config_pkg::*; #(
     parameter PIX_WIDTH          = cnn_config_pkg::PIX_WIDTH         ,
     parameter WEIGHT_WIDTH       = cnn_config_pkg::WEIGHT_WIDTH      ,
@@ -226,8 +225,5 @@ module conv_block import cnn_config_pkg::*; #(
     end
 
     assign o_ready = ready[0][0];
-always @(posedge clk) begin
-    if(i_valid)
-        $display("CONV_BLOCK_VALID data=%0d", i_data[0]);
-end
+
 endmodule : conv_block
