@@ -155,6 +155,14 @@ The convolution module performs convolution operations on incoming image data.
 
 The module forms the computational core of feature extraction within the CNN architecture.
 
+### Architecture of a MAC Engine
+<img width="647" height="221" alt="Screenshot 2026-06-23 092607" src="https://github.com/user-attachments/assets/24e2efd8-3360-4241-b2bc-156a3ce1b2b9" />
+
+
+
+
+
+
 ---
 
 #  Convolution Processing Block
@@ -305,6 +313,11 @@ The flatten layer converts multidimensional feature-map data into a one-dimensio
 
 The flatten layer is located between the pooling stage and the fully connected stage.
 
+### Flat Layer State Machine
+
+<img width="897" height="677" alt="image" src="https://github.com/user-attachments/assets/16571cea-3830-4669-811e-5c7930c9e401" />
+
+
 ---
 
 #  Fully Connected Layer
@@ -325,6 +338,11 @@ The fully connected layer performs dense neural network computation.
 ### Role
 
 This module performs the final stages of inference processing and generates network outputs.
+
+### Fully Connected Layer State Machine
+
+<img width="891" height="697" alt="image" src="https://github.com/user-attachments/assets/e730dd71-8686-498e-a1ce-926a64960786" />
+
 
 ---
 
@@ -353,6 +371,15 @@ The status register manages CNN execution flow.
 * Tracks CNN execution status
 * Indicates processing completion
 * Coordinates module activation
+
+### Status Register State Machine
+
+<img width="1310" height="415" alt="image" src="https://github.com/user-attachments/assets/5e3b4184-dd9f-46ba-a617-5d0d90a072f7" />
+
+
+
+
+
 
 ---
 
@@ -433,9 +460,19 @@ The overall processing sequence is:
  Implemented a CNN Inference Accelerator in SystemVerilog on Artix-7 FPGA using two convolution layers, ReLU, max-pooling, flattening, and two fully connected layers. The design successfully classified MNIST test images (0,1,2,7) with 100% accuracy in simulation.
 
 
- # Simulation Waveform
- <img width="1600" height="1019" alt="image" src="https://github.com/user-attachments/assets/13b22d34-b675-4f55-a701-2bb75c13b8ed" />
- <img width="1600" height="1017" alt="image" src="https://github.com/user-attachments/assets/e5a4ab00-b9c5-4dd9-915d-2b0130e4a611" />
+ ### Tcl Console Output
+
+ <img width="507" height="410" alt="image" src="https://github.com/user-attachments/assets/8c798019-c322-4aab-8a7e-6b4215efe084" />
+ <img width="417" height="391" alt="image" src="https://github.com/user-attachments/assets/ae73b9dc-2d66-433b-b362-0dfd2261c28d" />
+
+ ### Simulation Waveform
+
+ <img width="1600" height="1027" alt="image" src="https://github.com/user-attachments/assets/da08f5be-1497-4755-a298-31ee288976b8" />
+ <img width="1600" height="1017" alt="image" src="https://github.com/user-attachments/assets/e74b0993-6adc-4e82-ba4c-1ba879b6425a" />
 
 
+
+
+
+ 
  
